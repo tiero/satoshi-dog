@@ -1,0 +1,14 @@
+{
+  "name": "root",
+  "version": "1.0.0",
+  "license": "MIT",
+  "private": true,
+  "workspaces": [
+    "backend",
+    "packages/*"
+  ],
+  "scripts": {
+    "backend": "yarn --cwd backend start",
+    "frontend": "yarn --cwd frontend dev"
+  }
+}

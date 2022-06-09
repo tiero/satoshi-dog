@@ -1,0 +1,7 @@
+{
+  "name": "@satoshi-dog/config",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "tiero",
+  "license": "MIT"
+}
