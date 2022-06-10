@@ -127,6 +127,44 @@
 				],
 				"type": "object",
 				"additionalProperties": false
+			},
+			"IChoicePayload": {
+				"properties": {
+					"payout": {
+						"type": "string"
+					},
+					"dog": {
+						"$ref": "#/components/schemas/Dog"
+					},
+					"outpoint": {
+						"properties": {
+							"vout": {
+								"type": "number",
+								"format": "double"
+							},
+							"txid": {
+								"type": "string"
+							}
+						},
+						"required": [
+							"vout",
+							"txid"
+						],
+						"type": "object"
+					},
+					"parity": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"required": [
+					"payout",
+					"dog",
+					"outpoint",
+					"parity"
+				],
+				"type": "object",
+				"additionalProperties": false
 			}
 		},
 		"securitySchemes": {}
@@ -161,6 +199,26 @@
 			}
 		},
 		"/races": {
+			"post": {
+				"operationId": "NewRace",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Race"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Race"
+				],
+				"security": [],
+				"parameters": []
+			},
 			"get": {
 				"operationId": "GetRaceIDs",
 				"responses": {
@@ -215,6 +273,45 @@
 					}
 				]
 			},
+			"post": {
+				"operationId": "UpdateRace",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Race"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Race"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/IChoicePayload"
+							}
+						}
+					}
+				}
+			},
 			"get": {
 				"operationId": "GetRace",
 				"responses": {
@@ -224,6 +321,37 @@
 							"application/json": {
 								"schema": {
 									"$ref": "#/components/schemas/Race"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Race"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
+		"/races/{id}/run": {
+			"post": {
+				"operationId": "RunRace",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "boolean"
 								}
 							}
 						}

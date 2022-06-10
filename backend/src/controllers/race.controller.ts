@@ -1,5 +1,5 @@
 import StoreManager from "../storage";
-import { Get, Route, Tags, Delete as PostMethod, Body, Path, Delete } from "tsoa";
+import { Get, Route, Tags, Post, Body, Path, Delete } from "tsoa";
 import { Race } from '../models/race';
 import { newRace, pickChoice, getRace, deleteRace, getRaceIDs, IChoicePayload } from "../repositories/race.repository";
 import { getPrevout } from "../repositories/prevout.repository";
@@ -16,7 +16,7 @@ export default class RaceController {
 
   constructor(private store: StoreManager) { }
 
-  @PostMethod("/")
+  @Post("/")
   public async newRace(): Promise<Race> {
     return await newRace(this.store.race);
   }
@@ -31,7 +31,7 @@ export default class RaceController {
     return deleteRace(this.store.race, id);
   }
 
-  @PostMethod("/:id")
+  @Post("/:id")
   public async updateRace(@Path() id: string, @Body() body: IChoicePayload): Promise<Race> {
 
     try {
@@ -58,7 +58,7 @@ export default class RaceController {
     }
   }
 
-  @PostMethod("/:id/run")
+  @Post("/:id/run")
   public async runRace(@Path() id: string): Promise<boolean> {
    
     const race = await getRace(this.store.race, id);
