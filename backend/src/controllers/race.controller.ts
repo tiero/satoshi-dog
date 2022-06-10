@@ -83,7 +83,7 @@ export default class RaceController {
     let winnerDog = undefined;
     let houseWon = true;
     for (const choice of race.chosen) {
-      const tx = await buildTx(race, prevoutMap, choice.payout, config.apiUrl, config.prize, config.asset);
+      const tx = await buildTx(race, prevoutMap, choice.payout, config.apiUrl, config.flagAsset, config.prize, config.asset);
       try {
         const response = await axios.post(`${config.apiUrl}/tx`, tx);
         if (response.status !== 200) throw new Error(response.data);

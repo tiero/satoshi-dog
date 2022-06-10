@@ -6,6 +6,23 @@
 		"requestBodies": {},
 		"responses": {},
 		"schemas": {
+			"ContractRequest": {
+				"properties": {
+					"payout": {
+						"type": "string"
+					},
+					"choice": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"required": [
+					"payout",
+					"choice"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
 			"PingResponse": {
 				"properties": {
 					"message": {
@@ -185,6 +202,36 @@
 	},
 	"openapi": "3.0.0",
 	"paths": {
+		"/contract": {
+			"post": {
+				"operationId": "GetContract",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Contract"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/ContractRequest"
+							}
+						}
+					}
+				}
+			}
+		},
 		"/ping": {
 			"get": {
 				"operationId": "GetMessage",
