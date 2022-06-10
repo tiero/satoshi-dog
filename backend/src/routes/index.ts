@@ -15,5 +15,6 @@ router.get("/ping", async (_req, res) => {
 router.use("/users", UserRouter)
 router.use("/posts", PostRouter)
 router.use("/comments", CommentRouter)
+router.use("/race")
 
 export default router;
