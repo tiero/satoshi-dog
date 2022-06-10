@@ -24,7 +24,6 @@
     "@types/swagger-ui-express": "^4.1.3",
     "@types/uuid": "^8.3.4",
     "concurrently": "^7.0.0",
-    "faker": "^5.1.0",
     "jest": "^27.5.1",
     "nodemon": "^2.0.15",
     "ts-jest": "^27.1.3",
@@ -39,12 +38,10 @@
     "ldk": "^0.5.1",
     "liquidjs-lib": "git+https://github.com/louisinger/liquidjs-lib.git#psbt-taproot-support",
     "morgan": "^1.10.0",
-    "pg": "^8.7.3",
     "reflect-metadata": "^0.1.13",
     "swagger-ui-express": "^4.3.0",
     "tiny-secp256k1": "^2.2.1",
     "tsoa": "^3.2.1",
-    "typeorm": "^0.2.44",
     "uuid": "^8.3.2"
   },
   "nodemonConfig": {
