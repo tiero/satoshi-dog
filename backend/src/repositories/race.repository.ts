@@ -1,5 +1,5 @@
 
-import { Race, createRace} from '../models/race';
+import { Race, createRace, RaceStatus} from '../models/race';
 import { Dog } from '../models/dog';
 import { RaceStore } from '../storage/race.store';
 import { Choice, createChoice } from '../models/choice';
@@ -26,6 +26,27 @@ export const newRace = async (store: RaceStore):Promise<Race> => {
     ...race,
   });
   return race;
+}
+
+
+export const changeRaceStatus = async (store: RaceStore, id: string, status: RaceStatus): Promise<true> => {
+  await store.updateRace(id, (r: Race) => {
+    r.status = status;
+    return r;
+  })
+  return true;
+}
+
+export const declareWinner = async (store: RaceStore, id: string, houseWon: boolean, winnerDog?: Dog): Promise<true> => {
+  await store.updateRace(id, (r: Race) => {
+    r.status = RaceStatus.FINISHED;
+    r.houseWon = houseWon;
+    if (winnerDog) {
+      r.winner = winnerDog;
+    }
+    return r;
+  })
+  return true;
 }
 
 export const pickChoice = async (store: RaceStore, id: string, payload: IChoicePayload): Promise<Race> => {

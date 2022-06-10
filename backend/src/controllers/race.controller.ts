@@ -1,13 +1,16 @@
 import StoreManager from "../storage";
+import axios from "axios";
 import { Get, Route, Tags, Post, Body, Path, Delete } from "tsoa";
-import { Race } from '../models/race';
-import { newRace, pickChoice, getRace, deleteRace, getRaceIDs, IChoicePayload } from "../repositories/race.repository";
+import { Race, RaceStatus } from '../models/race';
+import { newRace, pickChoice, declareWinner, getRace, deleteRace, getRaceIDs, IChoicePayload, changeRaceStatus } from "../repositories/race.repository";
 import { getPrevout } from "../repositories/prevout.repository";
 
 import { fetchTxHex, Transaction, confidential, AssetHash, TxOutput } from "ldk";
 import config from "../config/app";
 
 import { buildTx } from "../utils/buildTx";
+import { Dog } from "../models/dog";
+import { extractErrorMessage } from "../utils/error";
 
 
 @Route("races")
@@ -59,8 +62,14 @@ export default class RaceController {
   }
 
   @Post("/:id/run")
-  public async runRace(@Path() id: string): Promise<boolean> {
+  public async runRace(@Path() id: string): Promise<{
+    houseWon: boolean,
+    winnerDog?: Dog,
+    winnerTxID?: string,
+  }> {
    
+    await changeRaceStatus(this.store.race, id, RaceStatus.IN_PROGRESS);
+
     const race = await getRace(this.store.race, id);
     const prevoutMap: Map<string, TxOutput> = new Map();
     for (const choice of race.chosen) {
@@ -70,16 +79,35 @@ export default class RaceController {
       prevoutMap.set(idOutpoint, prevout);
     }
 
-    let txsMap: Map<number, string> = new Map();
+    let winnerTxID = undefined;
+    let winnerDog = undefined;
+    let houseWon = true;
     for (const choice of race.chosen) {
       const tx = await buildTx(race, prevoutMap, choice.payout, config.apiUrl, config.prize, config.asset);
-      txsMap.set(choice.dog.number, tx);
+      try {
+        const response = await axios.post(`${config.apiUrl}/tx`, tx);
+        if (response.status !== 200) throw new Error(response.data);
+        winnerTxID = response.data;
+        if (!winnerTxID) {
+          houseWon = false,
+          winnerDog = choice.dog;
+        }
+        break;
+      } catch (err) {
+        const message = extractErrorMessage(err);
+        console.error(message);
+        console.log(tx);
+        continue;
+      }
     }
 
-    const txs = Array.from(txsMap.values());
-    console.log(txs);
+    await declareWinner(this.store.race, id, houseWon, winnerDog);
 
-    return true;
+    return {
+      houseWon,
+      winnerDog,
+      winnerTxID,
+    };
   }
 
   @Get("/:id")

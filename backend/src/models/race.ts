@@ -13,6 +13,8 @@ export interface Race {
   status: RaceStatus;
   available: Dog[];
   chosen: Choice[];
+  winner?: Dog;
+  houseWon?: boolean;
   createdAt: string;
 }
 

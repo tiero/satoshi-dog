@@ -114,6 +114,12 @@
 						},
 						"type": "array"
 					},
+					"winner": {
+						"$ref": "#/components/schemas/Dog"
+					},
+					"houseWon": {
+						"type": "boolean"
+					},
 					"createdAt": {
 						"type": "string"
 					}
@@ -351,7 +357,21 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"type": "boolean"
+									"properties": {
+										"winnerTxID": {
+											"type": "string"
+										},
+										"winnerDog": {
+											"$ref": "#/components/schemas/Dog"
+										},
+										"houseWon": {
+											"type": "boolean"
+										}
+									},
+									"required": [
+										"houseWon"
+									],
+									"type": "object"
 								}
 							}
 						}
