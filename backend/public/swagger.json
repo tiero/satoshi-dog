@@ -18,185 +18,112 @@
 				"type": "object",
 				"additionalProperties": false
 			},
-			"Post": {
+			"RaceStatus": {
+				"enum": [
+					"PENDING",
+					"IN_PROGRESS",
+					"FINISHED"
+				],
+				"type": "string"
+			},
+			"Dog": {
+				"properties": {
+					"name": {
+						"type": "string"
+					},
+					"number": {
+						"type": "number",
+						"enum": [
+							1,
+							2,
+							3,
+							4
+						]
+					}
+				},
+				"required": [
+					"name",
+					"number"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"Choice": {
 				"properties": {
 					"id": {
-						"type": "number",
-						"format": "double"
-					},
-					"title": {
 						"type": "string"
 					},
-					"content": {
+					"payout": {
 						"type": "string"
 					},
-					"userId": {
-						"type": "number",
-						"format": "double"
+					"dog": {
+						"$ref": "#/components/schemas/Dog"
 					},
-					"user": {
-						"$ref": "#/components/schemas/User"
-					},
-					"comments": {
-						"items": {
-							"$ref": "#/components/schemas/Comment"
+					"outpoint": {
+						"properties": {
+							"vout": {
+								"type": "number",
+								"format": "double"
+							},
+							"txid": {
+								"type": "string"
+							}
 						},
-						"type": "array"
+						"required": [
+							"vout",
+							"txid"
+						],
+						"type": "object"
+					},
+					"parity": {
+						"type": "number",
+						"format": "double"
 					},
 					"createdAt": {
-						"type": "string",
-						"format": "date-time"
-					},
-					"updatedAt": {
-						"type": "string",
-						"format": "date-time"
+						"type": "string"
 					}
 				},
 				"required": [
 					"id",
-					"title",
-					"content",
-					"userId",
-					"user",
-					"comments",
-					"createdAt",
-					"updatedAt"
+					"payout",
+					"dog",
+					"outpoint",
+					"parity",
+					"createdAt"
 				],
 				"type": "object",
 				"additionalProperties": false
 			},
-			"User": {
+			"Race": {
 				"properties": {
 					"id": {
-						"type": "number",
-						"format": "double"
-					},
-					"firstName": {
 						"type": "string"
 					},
-					"lastName": {
-						"type": "string"
+					"status": {
+						"$ref": "#/components/schemas/RaceStatus"
 					},
-					"email": {
-						"type": "string"
-					},
-					"posts": {
+					"available": {
 						"items": {
-							"$ref": "#/components/schemas/Post"
+							"$ref": "#/components/schemas/Dog"
 						},
 						"type": "array"
 					},
-					"comments": {
+					"chosen": {
 						"items": {
-							"$ref": "#/components/schemas/Comment"
+							"$ref": "#/components/schemas/Choice"
 						},
 						"type": "array"
 					},
 					"createdAt": {
-						"type": "string",
-						"format": "date-time"
-					},
-					"updatedAt": {
-						"type": "string",
-						"format": "date-time"
+						"type": "string"
 					}
 				},
 				"required": [
 					"id",
-					"firstName",
-					"lastName",
-					"email",
-					"posts",
-					"comments",
-					"createdAt",
-					"updatedAt"
-				],
-				"type": "object",
-				"additionalProperties": false
-			},
-			"Comment": {
-				"properties": {
-					"id": {
-						"type": "number",
-						"format": "double"
-					},
-					"content": {
-						"type": "string"
-					},
-					"userId": {
-						"type": "number",
-						"format": "double"
-					},
-					"user": {
-						"$ref": "#/components/schemas/User"
-					},
-					"postId": {
-						"type": "number",
-						"format": "double"
-					},
-					"post": {
-						"$ref": "#/components/schemas/Post"
-					},
-					"createdAt": {
-						"type": "string",
-						"format": "date-time"
-					},
-					"updatedAt": {
-						"type": "string",
-						"format": "date-time"
-					}
-				},
-				"required": [
-					"id",
-					"content",
-					"userId",
-					"user",
-					"postId",
-					"post",
-					"createdAt",
-					"updatedAt"
-				],
-				"type": "object",
-				"additionalProperties": false
-			},
-			"IUserPayload": {
-				"properties": {
-					"firstName": {
-						"type": "string"
-					},
-					"lastName": {
-						"type": "string"
-					},
-					"email": {
-						"type": "string"
-					}
-				},
-				"required": [
-					"firstName",
-					"lastName",
-					"email"
-				],
-				"type": "object",
-				"additionalProperties": false
-			},
-			"ICommentPayload": {
-				"properties": {
-					"content": {
-						"type": "string"
-					},
-					"userId": {
-						"type": "number",
-						"format": "double"
-					},
-					"postId": {
-						"type": "number",
-						"format": "double"
-					}
-				},
-				"required": [
-					"content",
-					"userId",
-					"postId"
+					"status",
+					"available",
+					"chosen",
+					"createdAt"
 				],
 				"type": "object",
 				"additionalProperties": false
@@ -205,10 +132,10 @@
 		"securitySchemes": {}
 	},
 	"info": {
-		"title": "express-typescript",
-		"version": "1.1.1",
+		"title": "@satoshi-dog/backend",
+		"version": "0.0.0",
 		"license": {
-			"name": "ISC"
+			"name": "MIT"
 		},
 		"contact": {}
 	},
@@ -233,9 +160,9 @@
 				"parameters": []
 			}
 		},
-		"/posts": {
+		"/races": {
 			"get": {
-				"operationId": "GetPosts",
+				"operationId": "GetRaceIDs",
 				"responses": {
 					"200": {
 						"description": "Ok",
@@ -243,7 +170,7 @@
 							"application/json": {
 								"schema": {
 									"items": {
-										"$ref": "#/components/schemas/Post"
+										"type": "string"
 									},
 									"type": "array"
 								}
@@ -252,34 +179,29 @@
 					}
 				},
 				"tags": [
-					"Post"
+					"Race"
 				],
 				"security": [],
 				"parameters": []
 			}
 		},
-		"/posts/{id}": {
-			"get": {
-				"operationId": "GetPost",
+		"/races/{id}": {
+			"delete": {
+				"operationId": "DeleteRace",
 				"responses": {
 					"200": {
 						"description": "Ok",
 						"content": {
 							"application/json": {
 								"schema": {
-									"allOf": [
-										{
-											"$ref": "#/components/schemas/Post"
-										}
-									],
-									"nullable": true
+									"type": "boolean"
 								}
 							}
 						}
 					}
 				},
 				"tags": [
-					"Post"
+					"Race"
 				],
 				"security": [],
 				"parameters": [
@@ -292,176 +214,23 @@
 						}
 					}
 				]
-			}
-		},
-		"/users": {
-			"get": {
-				"operationId": "GetUsers",
-				"responses": {
-					"200": {
-						"description": "Ok",
-						"content": {
-							"application/json": {
-								"schema": {
-									"items": {
-										"$ref": "#/components/schemas/User"
-									},
-									"type": "array"
-								}
-							}
-						}
-					}
-				},
-				"tags": [
-					"User"
-				],
-				"security": [],
-				"parameters": []
 			},
-			"post": {
-				"operationId": "CreateUser",
-				"responses": {
-					"200": {
-						"description": "Ok",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/User"
-								}
-							}
-						}
-					}
-				},
-				"tags": [
-					"User"
-				],
-				"security": [],
-				"parameters": [],
-				"requestBody": {
-					"required": true,
-					"content": {
-						"application/json": {
-							"schema": {
-								"$ref": "#/components/schemas/IUserPayload"
-							}
-						}
-					}
-				}
-			}
-		},
-		"/users/{id}": {
 			"get": {
-				"operationId": "GetUser",
+				"operationId": "GetRace",
 				"responses": {
 					"200": {
 						"description": "Ok",
 						"content": {
 							"application/json": {
 								"schema": {
-									"allOf": [
-										{
-											"$ref": "#/components/schemas/User"
-										}
-									],
-									"nullable": true
+									"$ref": "#/components/schemas/Race"
 								}
 							}
 						}
 					}
 				},
 				"tags": [
-					"User"
-				],
-				"security": [],
-				"parameters": [
-					{
-						"in": "path",
-						"name": "id",
-						"required": true,
-						"schema": {
-							"type": "string"
-						}
-					}
-				]
-			}
-		},
-		"/comments": {
-			"get": {
-				"operationId": "GetComments",
-				"responses": {
-					"200": {
-						"description": "Ok",
-						"content": {
-							"application/json": {
-								"schema": {
-									"items": {
-										"$ref": "#/components/schemas/Comment"
-									},
-									"type": "array"
-								}
-							}
-						}
-					}
-				},
-				"tags": [
-					"Comment"
-				],
-				"security": [],
-				"parameters": []
-			},
-			"post": {
-				"operationId": "CreateComment",
-				"responses": {
-					"200": {
-						"description": "Ok",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/Comment"
-								}
-							}
-						}
-					}
-				},
-				"tags": [
-					"Comment"
-				],
-				"security": [],
-				"parameters": [],
-				"requestBody": {
-					"required": true,
-					"content": {
-						"application/json": {
-							"schema": {
-								"$ref": "#/components/schemas/ICommentPayload"
-							}
-						}
-					}
-				}
-			}
-		},
-		"/comments/{id}": {
-			"get": {
-				"operationId": "GetComment",
-				"responses": {
-					"200": {
-						"description": "Ok",
-						"content": {
-							"application/json": {
-								"schema": {
-									"allOf": [
-										{
-											"$ref": "#/components/schemas/Comment"
-										}
-									],
-									"nullable": true
-								}
-							}
-						}
-					}
-				},
-				"tags": [
-					"Comment"
+					"Race"
 				],
 				"security": [],
 				"parameters": [

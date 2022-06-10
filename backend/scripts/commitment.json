@@ -1,0 +1,43 @@
+{
+  "contractName": "Commitment",
+  "constructorInputs": [
+    {
+      "name": "dog",
+      "type": "number"
+    },
+    {
+      "name": "payoutProgram",
+      "type": "bytes"
+    },
+    {
+      "name": "betAsset",
+      "type": "asset"
+    }
+  ],
+  "functions": [
+    {
+      "name": "bet",
+      "functionInputs": [
+        {
+          "name": "a",
+          "type": "number"
+        },
+        {
+          "name": "b",
+          "type": "number"
+        }
+      ],
+      "require": [],
+      "asm": [
+        "$dog",
+        "$payoutProgram",
+        "OP_2DROP",
+        "OP_0",
+        "OP_INSPECTINPUTASSET",
+        "OP_VERIFY",
+        "$betAsset",
+        "OP_EQUAL"
+      ]
+    }
+  ]
+}

@@ -19,6 +19,8 @@ export interface Race {
 export interface RaceRepository {
   addRace(race: Race): Promise<true>;
   getRace(id: string): Promise<Race>;
+  getRaceIDs(id: string): Promise<string[]>;
+  deleteRace(id: string): Promise<boolean>;
   updateRace(id: string, updateFn: (race: Race) => Race): Promise<true>
 }
 

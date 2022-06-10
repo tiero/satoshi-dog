@@ -38,6 +38,15 @@ export class RaceStore implements RaceRepository {
   async getRace(id: string): Promise<Race> {
     return this.state.get(id) as unknown as Race;
   }
+
+  async getRaceIDs(): Promise<string[]> {
+    return this.state.opts.store.keys().map(key => key.slice(5))
+  }
+
+  async deleteRace(id: string): Promise<boolean> {
+    return this.state.delete(id);
+  }
+
   async addRace(race: Race): Promise<true> {
     return this.state.set(race.id, race);
   }
