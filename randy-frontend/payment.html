@@ -1,0 +1,132 @@
+<html dir="ltr" lang="en" class="" lazy-loaded="true">
+  <head>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div id="loading">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        xmlns:xlink="http://www.w3.org/1999/xlink"
+        style="margin: auto; display: block; margin-top: 100px"
+        width="200px"
+        height="200px"
+        viewBox="0 0 100 100"
+        preserveAspectRatio="xMidYMid"
+      >
+        <circle
+          cx="50"
+          cy="50"
+          fill="none"
+          stroke="#fec34a"
+          stroke-width="10"
+          r="35"
+          stroke-dasharray="164.93361431346415 56.97787143782138"
+        >
+          <animateTransform
+            attributeName="transform"
+            type="rotate"
+            repeatCount="indefinite"
+            dur="1s"
+            values="0 50 50;360 50 50"
+            keyTimes="0;1"
+          ></animateTransform>
+        </circle>
+      </svg>
+    </div>
+    <div id="payment-prompt" class="hidden">
+      <h1 class="title">Lock in your funds</h1>
+      <p class="subtitle">
+        Please pay 1000 sats using the lightning invoice below.
+        <br />
+        This will lock in your funds for the game and is used along with the
+        funds of other participants for the eventual payout.
+      </p>
+      <div id="lightning-invoice-ctn">
+        <div id="lightning-invoice"></div>
+      </div>
+      <pre id="lightning-invoice-text"></pre>
+      <div id="payment-status" class="payment-status pending-payment-status">
+        <div id="dot"></div>
+        <p id="payment-status-message">
+          Waiting for receipt of lightning payment
+        </p>
+      </div>
+      <div class="flex">
+        <a class="continue-link" href="withdraw"
+          ><button id="continue" class="hidden">Continue</button></a
+        >
+      </div>
+    </div>
+  </body>
+  <script src="./buffer.js"></script>
+  <script src="./liquid0.js"></script>
+  <script src="./satoshi-dog-sdk.js"></script>
+  <script src="./qrcode.min.js"></script>
+  <script>
+    function hasFundedUtxos() {
+      try {
+        return (
+          transaction.mempool_stats.funded_txo_count ||
+          transaction.chain_stats.funded_txo_count
+        );
+      } catch (e) {
+        return false;
+      }
+    }
+
+    async function paymentReceivedHandler(invoice) {
+      let p2whAddress = invoice.lockupAddress;
+      let blockstreamResponse = await fetch(
+        `https://blockstream.info/liquidtestnet/api/address/${p2whAddress}`
+      );
+      let transaction = blockstreamResponse.json();
+
+      if (!hasFundedUtxos(transaction)) {
+        setTimeout(paymentReceivedHandler.bind(this, invoice), 2000);
+      }
+
+      let dot = document.getElementById("dot");
+      dot.className = "green-background-color";
+
+      let paymentStatus = document.getElementById("payment-status");
+      paymentStatus.classList.remove("pending-payment-status");
+
+      let paymentStatusMessage = document.getElementById(
+        "payment-status-message"
+      );
+      paymentStatusMessage.innerText = "Payment received";
+
+      let continueButton = document.getElementById("continue");
+      continueButton.classList.add("transition");
+      continueButton.classList.remove("hidden");
+    }
+
+    function displayInvoice(lnInvoice) {
+      new QRCode(document.getElementById("lightning-invoice"), lnInvoice);
+
+      let lightningInvoiceText = document.getElementById(
+        "lightning-invoice-text"
+      );
+      lightningInvoiceText.innerText = lnInvoice;
+    }
+
+    function exitLoadingState() {
+      let loading = document.getElementById("loading");
+      loading.classList.add("no-display");
+
+      let paymentPrompt = document.getElementById("payment-prompt");
+      paymentPrompt.classList.remove("hidden");
+    }
+
+    async function retrieveInvoice() {
+      debugger;
+      let reverseSubmarineSwapResponse = await createReverseSubmarineSwap();
+      let lightningInvoice = reverseSubmarineSwapResponse.invoice;
+      displayInvoice(lightningInvoice);
+      exitLoadingState();
+      setTimeout(paymentReceivedHandler.bind(this, lightningInvoice), 500);
+    }
+
+    retrieveInvoice();
+  </script>
+</html>

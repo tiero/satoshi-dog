@@ -1,0 +1,41 @@
+<html dir="ltr" lang="en" class="" lazy-loaded="true">
+  <head>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div id="pending">
+      <h1 class="title">The race has not started yet</h1>
+      <p class="subtitle">
+        The bets for the race are still being received.<br />
+        We will inform you of the results shortly.
+      </p>
+    </div>
+    <div id="win" class="hidden">
+      <h1 class="title">You win!</h1>
+      <p class="subtitle">
+        Your dog has won the game! <br />
+        Please enter a lightning invoice below for the amount of x sats.
+      </p>
+      <input
+        class="withdraw-input"
+        type="text"
+        placeholder="Please enter you lightning invoice"
+      />
+      <div class="flex">
+        <a class="continue-link" href="/index.html"
+          ><button id="continue">Back to races</button></a
+        >
+      </div>
+    </div>
+  </body>
+
+  <script>
+    setTimeout(() => {
+      let pending = document.getElementById("pending");
+      pending.classList.add("no-display");
+
+      let win = document.getElementById("win");
+      win.classList.remove("hidden");
+    }, 2000);
+  </script>
+</html>

@@ -1,0 +1,121 @@
+<html dir="ltr" lang="en" class="" lazy-loaded="true">
+  <head>
+    <style>
+      html {
+        font-family: Helvetica;
+      }
+
+      body {
+        max-width: 500px;
+        margin-left: auto;
+        margin-right: auto; /* width: 400px; */
+      }
+
+      .countdown-title {
+        text-align: center;
+        font-weight: 200;
+        font-size: 60px;
+        margin-top: 60px;
+        margin-bottom: 15px;
+      }
+
+      .countdown {
+        text-align: center;
+        font-weight: 200;
+        font-size: 80px;
+        margin-top: 0px;
+      }
+
+      .dog-option {
+        display: flex;
+        align-items: center;
+        box-shadow: -2px 5px 10px rgb(0 0 0 / 20%);
+        border-radius: 5px;
+        width: 100%;
+        padding: 10px;
+        transition: box-shadow 0.3s;
+      }
+
+      .dog-option:hover {
+        box-shadow: -2px 5px 10px rgb(0 0 0 / 5%);
+      }
+
+      .dog-icon-ctn {
+        position: relative;
+        width: 100px;
+        height: 40px;
+      }
+
+      .dog-icon {
+        font-size: 70px;
+        position: absolute;
+        top: -30px;
+        margin: 0px;
+        left: auto;
+        right: auto;
+        margin-left: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1 class="countdown-title">Next Race</h1>
+    <h1 id="timer" class="countdown">4 : 9</h1>
+
+    <div>
+      <div>
+        <a href="/payment.html">
+          <div class="dog-option">
+            <div
+              style="
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                font-weight: bold;
+                width: 30px;
+                height: 30px;
+                border-radius: 100%;
+                background-color: lightblue;
+                margin-right: 10px;
+              "
+            >
+              1
+            </div>
+            <div class="dog-icon-ctn">
+              <p class="dog-icon">🐕</p>
+            </div>
+            <p>Mario</p>
+          </div>
+        </a>
+        <div></div>
+      </div>
+    </div>
+  </body>
+  <script src="./bundle.js"></script>
+  <script src="./liquid0.js"></script>
+  <script src="./ecpair.js"></script>
+
+  <script>
+    function startTimer() {
+      var minute = 5;
+      var sec = 60;
+      let interval;
+      interval = setInterval(function () {
+        //https://stackoverflow.com/a/20618425/7407434
+        document.getElementById("timer").innerHTML = `${
+          minute < 10 ? "0" : ""
+        }${minute}:${sec < 10 ? "0" : ""}${sec}`;
+        sec--;
+        if (sec == 00) {
+          minute--;
+          sec = 60;
+          if (minute == 0) {
+            clearInterval(interval);
+          }
+        }
+      }, 1000);
+    }
+
+    startTimer();
+
+  </script>
+</html>
