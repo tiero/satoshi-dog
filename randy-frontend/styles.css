@@ -1,0 +1,126 @@
+html {
+  font-family: sans-serif;
+}
+
+body {
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#lightning-invoice-ctn {
+  display: flex;
+}
+
+#lightning-invoice {
+  width: 256px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 10px;
+  border: 4px solid #f0f0f0;
+}
+
+#lightning-invoice-text {
+  line-break: anywhere;
+  white-space: pre-wrap;
+}
+
+#dot {
+  width: 15px;
+  height: 15px;
+  border-radius: 100%;
+  margin-right: 10px;
+  background-color: lightgreen;
+}
+
+.pending-payment-status #dot {
+  background-color: orange;
+}
+
+.title {
+  text-align: center;
+  font-weight: 200;
+  font-size: 60px;
+  margin-top: 60px;
+  margin-bottom: 1 5px;
+}
+
+.subtitle {
+  font-weight: 200;
+  line-height: 2;
+  text-align: center;
+}
+
+.payment-status {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  font-weight: 200;
+}
+
+.pending-payment-status {
+  animation: fade-in-out 2s infinite;
+}
+
+@keyframes fade-in-out {
+  0% {
+    opacity: 0%;
+  }
+
+  50% {
+    opacity: 100%;
+  }
+
+  100% {
+    opacity: 0%;
+  }
+}
+
+.continue-link {
+  margin-left: auto;
+  margin-right: auto;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+button {
+  background-color: #fec34a;
+  padding: 20px 40px;
+  border: 1px solid #fec34a;
+  color: white;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+button:hover {
+  color: #fec34a;
+  background-color: white;
+}
+
+#continue {
+  opacity: 1;
+}
+
+.transition {
+  transition: 0.5s;
+}
+
+.hidden {
+  opacity: 0 !important;
+}
+
+.no-display {
+  display: none;
+}
+
+.flex {
+  display: flex;
+}
+
+.withdraw-input {
+  width: 100%;
+  height: 50px;
+  font-size: 14px;
+  padding-left: 10px;
+}
